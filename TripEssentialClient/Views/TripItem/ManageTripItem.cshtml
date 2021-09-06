@@ -1,0 +1,60 @@
+﻿@model TripEssentialClient.Models.TripItem.ManageTripItem
+
+@{
+    ViewBag.Title = "MANAGE TRIP ITEMS";
+
+    ViewBag.GridViewMessage = "Please use the button above to search for Cross-sell Items...";
+
+    Layout = "~/Views/Shared/_TripItemLayout.cshtml";
+}
+
+<script type="text/javascript">
+
+    const addOrRemoveKnapsackItem = (checkbox) => {
+
+        let _parameters =
+            `tripItemId=${checkbox.value}
+             &isAdd=${checkbox.checked}`
+
+        fetch("@Url.Action("AddOrRemoveKnapsackItem", "TripItem")", postOptions(removeLineBreaks(_parameters))).
+            then(handleError).
+            then(htmlDataType).
+            then((data) => {
+
+                if (checkbox.checked) {
+                    document.querySelector(`#divTripItemGrid .grid-view #${CSS.escape(checkbox.value)}`).remove()
+                    document.querySelector("#divCurrentTripItemGrid").innerHTML = data
+                }
+                else {
+
+                    document.querySelector(`#divCurrentTripItemGrid .grid-view #${CSS.escape(checkbox.value)}`).remove()
+                    document.querySelector("#divTripItemGrid").innerHTML = data
+
+                    fetch(`@Url.Action("GetKnapsackCapacity", "TripItem")`).
+                        then(handleError).
+                        then(jsonDataType).
+                        then((capacity) => {
+                            document.querySelector("#capacity").innerHTML = capacity
+                        }).
+                        catch((error) => {
+                            showErrorPopupForm(error)
+                        })
+                }
+            }).
+            catch((error) => {
+                checkbox.checked = !checkbox.checked
+                showErrorPopupForm(error)
+            });
+    }
+
+</script>
+
+<div class="page-form">
+    <div id="divCurrentTripItemGrid">
+        @{ await Html.RenderPartialAsync("CurrentTripItemGrid", Model.CurrentTripItemGrid);}
+    </div>
+    <h2>TRIP ITEMS</h2>
+    <div id="divTripItemGrid">
+        @{ await Html.RenderPartialAsync("TripItemGrid", Model.TripItemGrid);}
+    </div>
+</div>

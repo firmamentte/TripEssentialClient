@@ -1,0 +1,31 @@
+﻿@model List<TripEssentialClient.Models.TripItem.TripItemGrid>
+
+@if ((Model != null) && (Model.Any()))
+{
+    <div class="grid-view">
+        @foreach (var item in Model.OrderByDescending(item => item.Ranking).ThenBy(item => item.ItemName))
+        {
+            <div id="@item.TripItemId" class="gv-row">
+                <div class="checkbox-grid">
+                    <div class="checkbox-text">
+                        <div class="gv-row-line">
+                            <div class="checked-star"></div>
+                            <span class="gv-label">@item.Ranking</span>
+                            <span class="gv-label">@item.ItemName</span>
+                            <span class="gv-value">(@item.WeightInKgs kg)</span>
+                        </div>
+                    </div>
+                    <div class="checkbox-button">
+                        <div class="checkbox-grid-button">
+                            <label class="checkbox">
+                                <input type="checkbox" value="@item.TripItemId" onclick="addOrRemoveKnapsackItem(this)" />
+                                <span class="checkbox-slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+    <div class="grid-bottom-line"></div>
+}
