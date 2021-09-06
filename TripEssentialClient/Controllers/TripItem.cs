@@ -13,13 +13,6 @@ namespace TripEssentialClient.Controllers
         {
             try
             {
-                //if (!_tripItemResps.Any())
-                //    ViewBag.GridViewMessage = "Search yielded no results...";
-
-                //PartialView("TripItemGrid", ControllerHelper.TripItemHelper.FillTripItemGrid(_tripItemResps));
-
-                //PartialView("CurrentTripItemGrid", new List<CurrentTripItemGrid>());
-
                 return View(ControllerHelper.TripItemHelper.FillManageTripItem
                     (await TripEssentialClientBLL.TripItemHelper.GetKnapsacktems(),
                     await TripEssentialClientBLL.TripItemHelper.GetTripItems()));
